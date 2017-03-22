@@ -1,8 +1,10 @@
 package org.elixer.core;
 
 import org.elixer.core.Display.Model.*;
+import org.elixer.core.Display.UI.Font;
 import org.elixer.core.Display.UI.GraphicUI;
 import org.elixer.core.Display.UI.PanelUI;
+import org.elixer.core.Display.UI.TextUI;
 import org.elixer.core.Display.Window;
 import org.elixer.core.Entity.Entity;
 import org.elixer.core.Entity.ModelRenderer;
@@ -134,9 +136,9 @@ public class ElixerGame {
         Model model = new Model(mesh, new Texture("brick.png"));
 
         PanelUI panelUI = new PanelUI();
-        panelUI.addElement(new GraphicUI(new Texture("glass.png"), new Vector2f(0,0)));
+        //panelUI.addElement(new GraphicUI(new Texture("glass.png"), new Vector2f(0,0)));
 
-        Entity entity = new Entity("Test Model", new Vector3f(0,0,0), new Vector3f(0, 0, 0), new Vector3f(100, 100, 100));
+        Entity entity = new Entity("Test Model", new Vector3f(0,0,-5), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
 
         entity.addModule(new ModelRenderer(model));
         entity.addModule(panelUI);
@@ -158,7 +160,7 @@ public class ElixerGame {
     }
 
     private void init() {
-        currWindow = new Window("Elixer " + Ref.VERSION, 1100, 1100);
+        currWindow = new Window("Elixer " + Ref.VERSION, 1000, 1000);
 
         //GL CALLS
         glEnable(GL_DEPTH_TEST);

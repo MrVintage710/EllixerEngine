@@ -1,6 +1,7 @@
 package org.elixer.core.Display.Model;
 
 import org.elixer.core.Registry.Instancing;
+import org.elixer.core.Util.Console;
 import org.elixer.core.Util.Util;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -71,14 +72,15 @@ public class Mesh {
 
         int elementBuffer = glGenBuffers();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, Util.intsToIntBuffer(indecies), GL_STREAM_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, Util.intsToIntBuffer(indecies), GL_DYNAMIC_DRAW);
+        vbos.add(elementBuffer);
     }
 
     protected void createVBO(FloatBuffer floats, int attrib, int size) {
         int vboID = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboID);
 
-        glBufferData(GL_ARRAY_BUFFER, floats, GL_STREAM_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, floats, GL_DYNAMIC_DRAW);
         glVertexAttribPointer(attrib, size, GL_FLOAT, false, 0, 0);
         vbos.add(vboID);
     }
@@ -105,6 +107,18 @@ public class Mesh {
         glDeleteVertexArrays(vaoID);
         if(delete)
             Instancing.removeMesh(this);
+    }
+
+    public void subData(float[] data, int index) {
+        glBindBuffer(GL_ARRAY_BUFFER, vbos.get(index));
+        glBufferSubData(GL_ARRAY_BUFFER, 0, Util.floatsToFloatBuffer(data));
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
+    public void subData(int[] data, int index) {
+        glBindBuffer(GL_ARRAY_BUFFER, vbos.get(index));
+        glBufferSubData(GL_ARRAY_BUFFER, 0, Util.intsToIntBuffer(data));
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     public int getVaoID() {

@@ -16,25 +16,33 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public abstract class ElementUI implements IRenderable {
 
-    private Vector2f pos = new Vector2f();
-    private float width = 500, height = 500;
+    protected Vector2f pos = new Vector2f();
+    protected float width = 500, height = 500;
     protected static UIShader shader;
-    protected static Mesh mesh;
+
+    private Matrix4f transformProx = new Matrix4f();
 
     public ElementUI(Vector2f pos) {
         this.pos = pos;
-        mesh = new Mesh(new float[] {-1,1,-1,-1,1,1,1,-1});
         shader = new UIShader();
     }
 
     protected Matrix4f getTransform() {
-        Matrix4f matrix = new Matrix4f();
-        matrix.setIdentity();
+        transformProx.setIdentity();
         float x = ((pos.x + (width/2))*2/ElixerGame.currWindow.getWidth())-1;
         float y = ((pos.y - (height/2))*2/ElixerGame.currWindow.getHeight())+1;
-        matrix.translate(new Vector2f(x, y));
-        matrix.scale(new Vector3f(width/ElixerGame.currWindow.getWidth(), height/ElixerGame.currWindow.getHeight(), 1));
-        return matrix;
+        transformProx.translate(new Vector2f(x, y));
+        transformProx.scale(new Vector3f(width/ElixerGame.currWindow.getWidth(), height/ElixerGame.currWindow.getHeight(), 1));
+        return transformProx;
+    }
+
+    protected Matrix4f getTransform(float x, float y) {
+        transformProx.setIdentity();
+        float newX = ((x + (width/2))*2/ElixerGame.currWindow.getWidth())-1;
+        float newY = ((y - (height/2))*2/ElixerGame.currWindow.getHeight())+1;
+        transformProx.translate(new Vector2f(newX, newY));
+        transformProx.scale(new Vector3f(width/ElixerGame.currWindow.getWidth(), height/ElixerGame.currWindow.getHeight(), 1));
+        return transformProx;
     }
 
     @Override

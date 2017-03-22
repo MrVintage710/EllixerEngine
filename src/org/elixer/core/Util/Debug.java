@@ -21,7 +21,7 @@ public final class Debug {
 
     public static void addMessage(String id, String message) {
         TextUI textUI = new TextUI(message, font, new Vector2f(0, 0));
-        textUI.getPos().set(0, font.getSize() * (messages.size() * 40));
+        textUI.getPos().set(0, textUI.getSpacing() * messages.size());
         messages.put(id, textUI);
         panel.addElement(textUI);
     }

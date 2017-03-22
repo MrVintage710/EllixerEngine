@@ -1,9 +1,6 @@
 package org.elixer.core.Display.UI;
 
-import org.elixer.core.Display.Shader.TextUIShader;
-import org.elixer.core.Util.Console;
 import org.lwjgl.util.vector.Vector2f;
-import org.lwjgl.util.vector.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
@@ -14,9 +11,8 @@ import static org.lwjgl.opengl.GL30.*;
  */
 public class TextUI extends ElementUI{
     private String message;
-    private float minSpacing = 10f;
+    private float minSpacing = 45f;
     private Font font;
-    private TextUIShader shader = new TextUIShader();
 
     public TextUI(String message, Font font, Vector2f pos) {
         super(pos);
@@ -41,15 +37,19 @@ public class TextUI extends ElementUI{
                     Character cha =  font.getChar((int)c);
 
                     shader.start();
-                    cha.setRenderInfo(cursorX, cursorY, font.getSize(), font.getScaleH(), font.getScaleW());
-                    glBindVertexArray(cha.getMesh().getVaoID());
+                    cha.setUVValues(PanelUI.mesh, font.getScaleH(), font.getScaleW());
+                    width = cha.getWidth() * font.getSize();
+                    height = cha.getHeight() * font.getSize();
+                    float x = (pos.x + cursorX + cha.getXoffset()) * font.getSize();
+                    float y = (pos.y + cursorY + cha.getYoffset()) * font.getSize();
+                    glBindVertexArray(PanelUI.mesh.getVaoID());
                     glEnableVertexAttribArray(0);
                     glEnableVertexAttribArray(1);
-                    shader.setUniform("trans", getTransform());
-                    shader.setUniform("color", new Vector3f(1f,1,1f));
-                    glDrawArrays(GL_TRIANGLE_STRIP, 0, cha.getMesh().getVertecies());
+                    shader.setUniform("trans", getTransform(x,-y));
+                    glDrawArrays(GL_TRIANGLE_STRIP, 0, PanelUI.mesh.getVertecies());
                     glDisableVertexAttribArray(0);
                     glDisableVertexAttribArray(1);
+                    PanelUI.mesh.subData(new float[]{0,0,0,1,1,0,1,1}, 1);
                     glBindVertexArray(0);
                     cursorX += cha.getXadvance();
                     shader.stop();

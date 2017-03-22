@@ -11,7 +11,7 @@ import java.io.*;
 public class Font {
     Character[] characters;
 
-    private float size = 3f;
+    private float size;
     private float highest = 0f;
     private int scaleW;
     private int scaleH;
@@ -21,7 +21,7 @@ public class Font {
     private String textureLocation;
 
     public Font(String filename, float size) {
-        this.size = size/10;
+        this.size = size/20;
         try {
             reader = new BufferedReader(new FileReader(new File("src/assets/fonts/" + filename)));
         } catch (FileNotFoundException e) {

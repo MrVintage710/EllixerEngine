@@ -62,10 +62,7 @@ public class Character {
         mesh = new Mesh(uv2, points);
     }
 
-    public void setRenderInfo(Mesh mesh, float cursorX, float cursorY, float size, int texturWidth, int textureHeight) {
-        if(mesh != null)
-            mesh.destroy();
-
+    public void setUVValues(Mesh mesh, int texturWidth, int textureHeight) {
         float widthf = (float) texturWidth;
         float heightf = (float) textureHeight;
 
@@ -81,25 +78,7 @@ public class Character {
                 uvWidth, uvHeight
         };
 
-        float screenWidth = ElixerGame.currWindow.getWidth();
-        float screenHieght = ElixerGame.currWindow.getHeight();
-
-        float glxOffset = ((xoffset)/ screenWidth) * size;
-        float glyOffset = -((yoffset)/screenHieght) * size;
-        float glX = ((cursorX/screenWidth) * size) + glxOffset;
-        float glY = ((cursorY/screenHieght) * size) + glyOffset;
-        float glMaxX = (((cursorX+width)/screenWidth) * size) + glxOffset;
-        float glMaxY = (((cursorY+height)/screenHieght) * size) + glyOffset;
-
-        float[] points = new float[] {
-                glX, glY,
-                glX, glMaxY,
-                glMaxX,glY,
-                glMaxX,glMaxY
-        };
-
-        //mesh.subData(points, 0);
-        //mesh.subData(uv, 1);
+        mesh.subData(uv, 1);
     }
 
     public int getId() {

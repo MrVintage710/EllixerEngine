@@ -52,8 +52,6 @@ public class Window {
         GL.createCapabilities();
         glfwSwapInterval(1);
         glfwShowWindow(windowID);
-
-        glfwSetInputMode(windowID, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 
     public void update() {
@@ -194,6 +192,7 @@ public class Window {
     }
 
     public void setCursorDisabled(boolean bool) {
+        glfwSetCursorPos(windowID, width/2, hieght/2);
         if(bool) {
             glfwSetInputMode(windowID, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         } else {

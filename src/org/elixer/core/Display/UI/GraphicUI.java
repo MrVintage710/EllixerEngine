@@ -22,13 +22,15 @@ public class GraphicUI extends ElementUI {
     @Override
     protected void onDraw() {
         shader.start();
-        glBindVertexArray(mesh.getVaoID());
+        glBindVertexArray(PanelUI.mesh.getVaoID());
         glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
         shader.setUniform("trans", getTransform());
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, mesh.getVertecies());
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, PanelUI.mesh.getVertecies());
         glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
         glBindVertexArray(0);
         shader.stop();
     }
