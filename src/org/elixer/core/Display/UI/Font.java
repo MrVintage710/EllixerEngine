@@ -42,7 +42,7 @@ public class Font {
                         scaleH = getIValue("scaleH", line);
                         break;
                     case "page":
-                        textureLocation = getSValue("file", line);
+                        textureLocation = "fonts/" + getSValue("file", line);
                         break;
                     case "chars":
                         characters = new Character[getIValue("count", line) +1];
@@ -58,6 +58,7 @@ public class Font {
                                 getIValue("yoffset", line),
                                 getIValue("xadvance", line)
                         );
+
                         if(characters[amount].getHeight() > highest) {
                             highest = characters[amount].getHeight();
                         }

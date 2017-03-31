@@ -1,10 +1,11 @@
 package org.elixer.core.Display;
 
-import org.elixer.core.Registry.Instancing;
 import org.elixer.core.Util.Console;
 import org.elixer.core.Util.Debug;
 import org.elixer.core.Util.Input;
+import org.elixer.core.Util.Util;
 import org.lwjgl.glfw.*;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -18,7 +19,7 @@ public class Window {
 
     private long windowID;
 
-    private int width, hieght;
+    private int width, height, screenWidth, screenHeight;
 
     GLFWKeyCallback keyCallback = GLFWKeyCallback.create(this::onKeyCallback);
     GLFWErrorCallback errorCallback = GLFWErrorCallback.create(this::onErrorCallback);
@@ -28,7 +29,7 @@ public class Window {
 
     public Window(String title, int width, int hieght) {
         this.width = width;
-        this.hieght = hieght;
+        this.height = hieght;
         if(!glfwInit()) {
             Console.printend("GLFW couldn't init.");
         }
@@ -47,6 +48,12 @@ public class Window {
         glfwSetErrorCallback(errorCallback);
         glfwSetCursorPosCallback(windowID, cursorPosCallback);
         glfwSetMouseButtonCallback(windowID, mouseButtonCallback);
+
+        int[] widthBuffer = new int[2];
+        int[] heightBuffer = new int[2];
+        glfwGetMonitorPhysicalSize(glfwGetPrimaryMonitor(), widthBuffer, heightBuffer);
+        screenWidth = widthBuffer[0];
+        screenHeight = heightBuffer[0];
 
         glfwMakeContextCurrent(windowID);
         GL.createCapabilities();
@@ -179,9 +186,9 @@ public class Window {
 
     private void onWindowResize(long windowID, int width, int height) {
         this.width = width;
-        this.hieght = height;
-        glViewport(0, 0, this.width, this.hieght);
-        Console.println(width +" | " + hieght);
+        this.height = height;
+        glViewport(0, 0, this.width, this.height);
+        Console.println(width +" | " + this.height);
     }
 
     private void onMouseButton(long window, int button, int action, int mods) {
@@ -192,7 +199,9 @@ public class Window {
     }
 
     public void setCursorDisabled(boolean bool) {
-        glfwSetCursorPos(windowID, width/2, hieght/2);
+        glfwSetCursorPos(windowID, width/2, height /2);
+        Input.setX((float) width/2);
+        Input.setY((float) height /2);
         if(bool) {
             glfwSetInputMode(windowID, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         } else {
@@ -213,6 +222,16 @@ public class Window {
     }
 
     public int getHeight() {
-        return hieght;
+        return height;
     }
+
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public int getScreenHeight() {
+        return screenHeight;
+    }
+
+    public float getDensity() { return (float)screenWidth/(float)screenWidth; }
 }

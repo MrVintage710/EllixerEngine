@@ -40,7 +40,6 @@ public class ModelRenderer extends Module implements IRenderable {
     @Override
     public void draw() {
         glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         shader.start();
         glBindVertexArray(model.getMesh().getVaoID());
         glEnableVertexAttribArray(0);

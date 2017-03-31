@@ -1,6 +1,7 @@
 package org.elixer.core.Util;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.nio.FloatBuffer;
@@ -55,6 +56,11 @@ public class Util {
             value = max;
         }
 
+        return value;
+    }
+
+    public static Vector2f clamp(float min, float max, Vector2f value) {
+        value.set(clamp(min, max, value.x), clamp(min, max, value.x));
         return value;
     }
 }

@@ -77,8 +77,7 @@ public class ModuleCamera extends Module {
         if(Input.SPACE) {
             entity.translateLocal(0, 0.1f, 0);
         }
-        if(Debug.isActive())
-            entity.setRotation(Util.clamp(-90, 90, entity.getRot().x), entity.getRot().y, 0);
+        entity.setRotation(Util.clamp(-90, 90, entity.getRot().x), entity.getRot().y, 0);
     }
 
     public Matrix4f getProjectionMatrix() {

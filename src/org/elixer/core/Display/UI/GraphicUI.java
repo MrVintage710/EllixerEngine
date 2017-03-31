@@ -1,5 +1,6 @@
 package org.elixer.core.Display.UI;
 
+import org.elixer.core.Display.Model.Mesh;
 import org.elixer.core.Display.Model.Texture;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -14,24 +15,27 @@ public class GraphicUI extends ElementUI {
 
     protected Texture texture;
 
-    public GraphicUI(Texture tex, Vector2f pos) {
-        super(pos);
+    public GraphicUI(Texture tex) {
+        super();
+        width = tex.getWidth();
+        height = tex.getHieght();
+        texture = tex;
+    }
+
+    public GraphicUI(Texture tex, float x, float y) {
+        super(x, y, tex.getWidth(), tex.getHieght());
+        texture = tex;
+    }
+
+    public GraphicUI(Texture tex, float x, float y, float width, float height) {
+        super(x, y, width, height);
         texture = tex;
     }
 
     @Override
     protected void onDraw() {
-        shader.start();
-        glBindVertexArray(PanelUI.mesh.getVaoID());
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
-        shader.setUniform("trans", getTransform());
         glDrawArrays(GL_TRIANGLE_STRIP, 0, PanelUI.mesh.getVertecies());
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-        glBindVertexArray(0);
-        shader.stop();
     }
 }

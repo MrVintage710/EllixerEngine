@@ -1,10 +1,7 @@
 package org.elixer.core;
 
 import org.elixer.core.Display.Model.*;
-import org.elixer.core.Display.UI.Font;
-import org.elixer.core.Display.UI.GraphicUI;
-import org.elixer.core.Display.UI.PanelUI;
-import org.elixer.core.Display.UI.TextUI;
+import org.elixer.core.Display.UI.*;
 import org.elixer.core.Display.Window;
 import org.elixer.core.Entity.Entity;
 import org.elixer.core.Entity.ModelRenderer;
@@ -13,9 +10,7 @@ import org.elixer.core.Entity.Scene;
 import org.elixer.core.Registry.Instancing;
 import org.elixer.core.Util.Console;
 import org.elixer.core.Util.Debug;
-import org.elixer.core.Util.Input;
 import org.elixer.core.Util.Ref;
-import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -27,14 +22,15 @@ import static org.lwjgl.opengl.GL11.*;
 //TO DO Section
     //TODO Finish the first iteration of the input system.
     //TODO Create a dynamic game loop with a fixed step and a free step.
-    //TODO Add module interactivity.
-    //TODO Do first round of optimisations.
-    //TODO Add .obj support for meshes.
+    //TODO ** Add module interactivity.
+    //TODO ** Do first round of optimisations.
+    //TODO ** Add .obj support for meshes.
     //TODO first lighting model
-    //TODO make sure all classes that need to destroy data use the instancer.
-    //TODO make render Layers more efficient.
-    //TODO Fix projection matrix: any aspect ratio other than 1:1
+    //TODO ** make render Layers more efficient.
+    //TODO ** Fix projection matrix: any aspect ratio other than 1:1
     //TODO Make Text/UI rendering more efficient. Make them only use 1 mesh.
+    //TODO Object Picking for UI.
+    //TODO UI Border
 
 
 public class ElixerGame {
@@ -136,7 +132,13 @@ public class ElixerGame {
         Model model = new Model(mesh, new Texture("brick.png"));
 
         PanelUI panelUI = new PanelUI();
-        //panelUI.addElement(new GraphicUI(new Texture("glass.png"), new Vector2f(0,0)));
+        GraphicUI graphicUI = new GraphicUI(new Texture("glass.png"), 0.5f, 0.5f, 16, 16);
+        graphicUI.setDim(16, 256);
+        panelUI.addElement(graphicUI);
+
+
+        Debug.addMessage("Test", "Test Text");
+        Debug.addMessage("Test2", "Text Test #2");
 
         Entity entity = new Entity("Test Model", new Vector3f(0,0,-5), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
 
@@ -145,15 +147,13 @@ public class ElixerGame {
 
         currScene.addEntity(entity);
 
-        Debug.addMessage("clicked", "Clicked: (" + Input.clickedX + ", " + Input.clickedY + ")");
-        Debug.addMessage("inst", Instancing.printOut());
-
         float counter = 0f;
         while (!currWindow.shouldClose() && isRunning) {
-            Debug.editMessage("clicked", "Clicked: (" + Input.clickedX + ", " + Input.clickedY + ")");
-            Debug.editMessage("inst", Instancing.printOut());
             render();
             currWindow.update();
+
+            Debug.editMessage("Test", "Test Text");
+            Debug.editMessage("Test2", "Text Test ()");
 
             counter += 0.05;
         }
@@ -164,6 +164,12 @@ public class ElixerGame {
 
         //GL CALLS
         glEnable(GL_DEPTH_TEST);
+        System.setProperty("org.lwjgl.opengl.Display.enableHighDPI", "true");
+
+        Console.println(currWindow.getScreenWidth());
+        Console.println(currWindow.getScreenHeight());
+
+        Console.println((double)currWindow.getWidth()/(double)currWindow.getScreenWidth());
 
         //DATA INIT
         currScene.addEntity(Debug.getEntity());
